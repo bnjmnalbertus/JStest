@@ -33,6 +33,36 @@
 
 // Feel free to ask lots of questions and think aloud.
 
+window.onload = function () {
+   var go_button = document.getElementById("go");
+   go_button.addEventListener("click", fire);
+}
+
+function fire () {
+   // This function gathers values from user inputs and builds and inserts a
+   // JSONP script into the document head.
+
+   var head = document.getElementsByTagName("head")[0];
+   var script = document.createElement('script');
+   var metric = document.getElementById("metric");
+   var selectedMetric = metric.options[metric.selectedIndex];
+   script.setAttribute("type", "text/javascript");
+   script.setAttribute("src", "https://apps.compete.com/sites/" +
+      document.getElementById("domain").value +
+      "/trended/" +
+      selectedMetric.value +
+      "/?apikey=27953e450d095eb57efe7d37187f0ae8&jsonp=parseResponse");
+   head.appendChild(script);
+}
+
+function parseResponse (data) {
+   // This is the callback used in the JSONP script. It's mostly a wrapper
+   // around makeChart.
+   var metric = document.getElementById("metric");
+   var selectedMetric = metric.options[metric.selectedIndex];
+   makeChart(data, selectedMetric.text, selectedMetric.value, document.getElementById("domain").value);
+}
+
 function makeChart (data, metricName, metricCode, domain) {
     // Params:
     // `data` - the raw data Compete gives you after the JSONP request
