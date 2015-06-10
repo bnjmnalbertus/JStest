@@ -40,9 +40,11 @@ window.onload = function () {
 
    go_button.addEventListener("click", fire);
    clearStartEnd_button.addEventListener("click", function () {
+      // Clear "start_date" and "end_date" text fields.
       document.getElementsByName("start_date")[0].value = "";
       document.getElementsByName("end_date")[0].value = "";});
    clearLatest_button.addEventListener("click", function () {
+      // Clear "latest" field.
       document.getElementsByName("latest")[0].value = "";});
 }
 
@@ -64,15 +66,19 @@ function fire () {
       "/?apikey=27953e450d095eb57efe7d37187f0ae8&jsonp=parseResponse";
 
    if (start_date.value != "" && end_date.value != "") {
+      // Use start/end dates.
       src += "&start_date=" + start_date.value;
       src += "&end_date=" + end_date.value;
    }
    else if (latest.value != "") {
+      // Use latest.
       src += "&latest=" + latest.value;
    }
 
+   // Set type and src of the script element.
    script.setAttribute("type", "text/javascript");
    script.setAttribute("src", src);
+   // Insert the script, triggering the JSONP call.
    head.appendChild(script);
 }
 
@@ -81,7 +87,8 @@ function parseResponse (data) {
    // around makeChart.
    var metric = document.getElementById("metric");
    var selectedMetric = metric.options[metric.selectedIndex];
-   makeChart(data, selectedMetric.text, selectedMetric.value, document.getElementById("domain").value);
+   makeChart(data, selectedMetric.text, selectedMetric.value, 
+               document.getElementById("domain").value);
 }
 
 function makeChart (data, metricName, metricCode, domain) {
