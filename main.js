@@ -35,7 +35,15 @@
 
 window.onload = function () {
    var go_button = document.getElementById("go");
+   var clearStartEnd_button = document.getElementById("clearStartEnd");
+   var clearLatest_button = document.getElementById("clearLatest");
+
    go_button.addEventListener("click", fire);
+   clearStartEnd_button.addEventListener("click", function () {
+      document.getElementsByName("start_date")[0].value = "";
+      document.getElementsByName("end_date")[0].value = "";});
+   clearLatest_button.addEventListener("click", function () {
+      document.getElementsByName("latest")[0].value = "";});
 }
 
 function fire () {
@@ -46,12 +54,25 @@ function fire () {
    var script = document.createElement('script');
    var metric = document.getElementById("metric");
    var selectedMetric = metric.options[metric.selectedIndex];
-   script.setAttribute("type", "text/javascript");
-   script.setAttribute("src", "https://apps.compete.com/sites/" +
+   var start_date = document.getElementsByName("start_date")[0];
+   var end_date = document.getElementsByName("end_date")[0];
+   var latest = document.getElementsByName("latest")[0];
+   var src = "https://apps.compete.com/sites/" +
       document.getElementById("domain").value +
       "/trended/" +
       selectedMetric.value +
-      "/?apikey=27953e450d095eb57efe7d37187f0ae8&jsonp=parseResponse");
+      "/?apikey=27953e450d095eb57efe7d37187f0ae8&jsonp=parseResponse";
+
+   if (start_date.value != "" && end_date.value != "") {
+      src += "&start_date=" + start_date.value;
+      src += "&end_date=" + end_date.value;
+   }
+   else if (latest.value != "") {
+      src += "&latest=" + latest.value;
+   }
+
+   script.setAttribute("type", "text/javascript");
+   script.setAttribute("src", src);
    head.appendChild(script);
 }
 
